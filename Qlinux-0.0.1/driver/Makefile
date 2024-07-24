@@ -1,4 +1,4 @@
-# Makefile For User Component
+# Makefile For Driver Component
 
 SCRIPT_PATH	:=	../script
 
@@ -8,3 +8,4 @@ SCRIPT_PATH	:=	../script
 
 
 .PHONY: main
+main:

@@ -2,12 +2,14 @@
 
 # Define Global Path
 
-CUR_DIR			=	$(CURDIR)
+CUR_DIR			:=	$(CURDIR)
+KERNEL_VERSION	:=	0.0.1
 
 # General Purpose Directory Path
 GLOBAL_INCLUDE	:=	$(CUR_DIR)/inclue
 GLOBAL_BUILD	:=	$(CUR_DIR)/build
 GLOBAL_SCRIPT	:=	$(CUR_DIR)/script
+GLOBAL_CONFIG	:=	$(CUR_DIR)/config
 
 -include $(GLOBAL_SCRIPT)/func.mk
 
@@ -16,6 +18,9 @@ GLOBAL_X86		:=	$(CUR_DIR)/x86
 GLOBAL_KERNEL	:=	$(CUR_DIR)/kernel
 GLOBAL_USER		:=	$(CUR_DIR)/user
 GLOBAL_DRIVER	:=	$(CUR_DIR)/driver
+
+DISK_PATH		:=	$(GLOBAL_BUILD)
+DISK_NAME		:=	Qlinux
 
 # Absolute Include Path (Header File)
 INCLUDE_ABS			:=	$(GLOBAL_INCLUDE)
@@ -35,8 +40,10 @@ export INCLUDE_DRIVER_ABS
 GLOBAL_COMPONENT_LIST	:=	user kernel driver x86
 
 # Path Depedent Variables For Tools
-ifndef TOOLCHAIN_PREFIX
-	TOOLCHAIN_PREFIX 	:=		x86_64-elf-
+ifdef T
+	TOOLCHAIN_PREFIX 	:=	$(T)
+else
+	TOOLCHAIN_PREFIX	:=	x86_64-elf-
 endif
 
 CXX			:=		$(TOOLCHAIN_PREFIX)gcc
@@ -47,6 +54,14 @@ OBJDUMP		:=		$(TOOLCHAIN_PREFIX)objdump
 OBJCOPY		:=		$(TOOLCHAIN_PREFIX)objcopy
 QEMU		:=		qemu-system-x86_64
 BOCHS		:=		bochs
+BXIMAGE		:=		bximage
+GDB			:=		gdb
+
+ifndef E
+	EMULATOR	:=	$(BOCHS)
+else
+	EMULATOR	:=	$(E)
+endif
 
 export CXX AS LD CPP OBJCOPY OBJDUMP
 
@@ -54,16 +69,41 @@ export CXX AS LD CPP OBJCOPY OBJDUMP
 CPU_ARCH		:=	i686
 BITS			:=	32
 AS_SYNTAX		:=	intel
+HARD_DISK_SIZE	:=	16M
 
 GCC_FLAGS		:=	
 LD_FLAGS		:=	
 AS_FLAGS		:=	-mmnemonic=$(AS_SYNTAX) -msyntax=$(AS_SYNTAX) --warn --$(BITS) -march=$(CPU_ARCH) -mtune=$(CPU_ARCH)
+BOCHS_FLAGS		:=	-f $(GLOBAL_CONFIG)/bochsrc -q
+BXIMAGE_FLAGS	:=	-func=create -hd=$(HARD_DISK_SIZE) -imgmode=flat -sectsize=512 -q $(DISK_PATH)/$(DISK_NAME).hd 
 
+export GCC_FLAGS 
+export LD_FLAGS
+export AS_FLAGS
 
+#### Optional Flags
+# The DEBUGGER equals to zero by default
+DEBUGGER ?= 0
+
+# SILENT Flags used to control Build Information -S (S=1) by default
+ifdef S
+	SILENT	:=	$(S)
+else
+	SILENT	:=	1
+endif
+
+# Switch For Debugger if Defined DEBUGGER Flag it will add some debugger info to the compilation process
+# Debugger Flags -D	(D=0) by default
+ifdef D
+	DEBUGGER 	:= $(D)
+else
+	DEBUGGER	:=	0
+endif 
+
+ifeq ($(DEBUGGER), 1)
 AS_FLAGS		+=	--gstabs
-
-export GCC_FLAGS LD_FLAGS AS_FLAGS
-
+GCC_FLAGS		+=	-g
+endif
 
 # This Function only used to test path consistency
 define _path_check

@@ -32,9 +32,17 @@ info:
 
 # make all
 all: $(DEPENDENCIES)
-ifeq ($(SILENT), 0)
+# First Checks Whether the virtual hard disk file exits
+# Second Write Target Binary File To the virtual hard disk file
+ifeq ($(SILENT), 1)
+	@$(call file_check, $(DISK_PATH)/$(DISK_NAME).hd, $(BXIMAGE) $(BXIMAGE_FLAGS))
+	@$(MAKE) write_disk
+else
 	@$(call _path_check)
+	$(call file_check, $(DISK_PATH)/$(DISK_NAME).hd, $(BXIMAGE) $(BXIMAGE_FLAGS))
+	$(MAKE) write_disk
 endif
+	
 
 # make run
 run:
@@ -89,4 +97,14 @@ ifeq ($(SILENT), 1)
 	@rm -rf ./build
 else
 	rm -rf $(GLOBAL_BUILD)
+endif
+
+# Write Binary File To the Virtual Disk
+.PHONY: write_disk
+write_disk:
+# Write Boot.bin
+ifeq ($(SILENT), 1)
+	@$(DD) if=$(GLOBAL_BUILD)/x86/boot.bin of=$(DISK_PATH)/$(DISK_NAME).hd bs=512 count=1 conv=notrunc
+else
+	$(DD) if=$(GLOBAL_BUILD)/x86/boot.bin of=$(DISK_PATH)/$(DISK_NAME).hd bs=512 count=1 conv=notrunc
 endif

@@ -1,3 +1,6 @@
 # This File Define Which File Or Directory need to be ignored
 
 */build/
+*/*.bin
+*/*.o
+*/*.dump

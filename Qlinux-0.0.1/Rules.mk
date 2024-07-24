@@ -12,6 +12,7 @@ GLOBAL_SCRIPT	:=	$(CUR_DIR)/script
 GLOBAL_CONFIG	:=	$(CUR_DIR)/config
 
 -include $(GLOBAL_SCRIPT)/func.mk
+export GLOBAL_BUILD
 
 # Component Directory Path
 GLOBAL_X86		:=	$(CUR_DIR)/x86
@@ -52,10 +53,12 @@ LD			:=		$(TOOLCHAIN_PREFIX)ld
 CPP			:=		$(TOOLCHAIN_PREFIX)gcc -E 
 OBJDUMP		:=		$(TOOLCHAIN_PREFIX)objdump
 OBJCOPY		:=		$(TOOLCHAIN_PREFIX)objcopy
+NASM		:=		nasm
 QEMU		:=		qemu-system-x86_64
 BOCHS		:=		bochs
 BXIMAGE		:=		bximage
 GDB			:=		gdb
+DD			:=		dd
 
 ifndef E
 	EMULATOR	:=	$(BOCHS)
@@ -63,7 +66,7 @@ else
 	EMULATOR	:=	$(E)
 endif
 
-export CXX AS LD CPP OBJCOPY OBJDUMP
+export CXX AS LD CPP OBJCOPY OBJDUMP NASM
 
 # Switch Flags For Compilation
 CPU_ARCH		:=	i686
@@ -73,6 +76,7 @@ HARD_DISK_SIZE	:=	16M
 
 GCC_FLAGS		:=	
 LD_FLAGS		:=	
+NASM_FLAGS		:=	-f bin -Wall
 AS_FLAGS		:=	-mmnemonic=$(AS_SYNTAX) -msyntax=$(AS_SYNTAX) --warn --$(BITS) -march=$(CPU_ARCH) -mtune=$(CPU_ARCH)
 BOCHS_FLAGS		:=	-f $(GLOBAL_CONFIG)/bochsrc -q
 BXIMAGE_FLAGS	:=	-func=create -hd=$(HARD_DISK_SIZE) -imgmode=flat -sectsize=512 -q $(DISK_PATH)/$(DISK_NAME).hd 

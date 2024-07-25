@@ -102,9 +102,15 @@ endif
 # Write Binary File To the Virtual Disk
 .PHONY: write_disk
 write_disk:
-# Write Boot.bin
+# Write Modules Process:
+#	- Write boot.bin 		Sector Size 1
+#	- Write loader.bin 		Sector Size 2
 ifeq ($(SILENT), 1)
-	@$(DD) if=$(GLOBAL_BUILD)/x86/boot.bin of=$(DISK_PATH)/$(DISK_NAME).hd bs=512 count=1 conv=notrunc
+	@$(DD) if=$(GLOBAL_BUILD)/x86/boot.bin of=$(DISK_PATH)/$(DISK_NAME).hd bs=512 count=$(BOOT_SECTOR_SIZE) conv=notrunc
+	@$(DD) if=$(GLOBAL_BUILD)/x86/loader.bin of=$(DISK_PATH)/$(DISK_NAME).hd bs=512 count=$(LOADER_SECTOR_SIZE) \
+	conv=notrunc seek=$(BOOT_SECTOR_SIZE)
 else
-	$(DD) if=$(GLOBAL_BUILD)/x86/boot.bin of=$(DISK_PATH)/$(DISK_NAME).hd bs=512 count=1 conv=notrunc
+	$(DD) if=$(GLOBAL_BUILD)/x86/boot.bin of=$(DISK_PATH)/$(DISK_NAME).hd bs=512 count=$(BOOT_SECTOR_SIZE) conv=notrunc
+	$(DD) if=$(GLOBAL_BUILD)/x86/loader.bin of=$(DISK_PATH)/$(DISK_NAME).hd bs=512 count=$(LOADER_SECTOR_SIZE) 	\
+	conv=notrunc seek=$(BOOT_SECTOR_SIZE)
 endif

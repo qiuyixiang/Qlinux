@@ -5,7 +5,7 @@
 %include "bootloader.inc"
 
 BITS 16
-ORG LOADER_START_ADDR
+ORG BOOT_START_ADDR
 section .text
 global _start
 _start:  
@@ -36,11 +36,11 @@ _start:
     MOV DL, VGA_RD_COLUMN
 
     INT 0x10
-
+; Makesure DS is still 0x0000
     MOV AX, 0x0000
     MOV DS, AX
 
-; Print Characters
+; Print Characters for loader successfully loaded
     MOV AH, 0x13
     MOV AL, 0x01
     MOV BH, 0x00    ; Current Display Page 0
@@ -52,15 +52,69 @@ _start:
     MOV SI, 0x0000
     MOV ES, SI
     INT 0x10
+    NOP 
+    NOP
+; Print message about hard disk reading
+    MOV AH, 0x13
+    MOV AL, 0x01
+    MOV BH, 0x00
+    MOV BL, 0b00000111
+    MOV BP, disk_info
+    MOV CX, DS:[disk_info_len]
+    MOV DH, 0x01
+    MOV DL, 0x00
+    MOV DI, 0x0000
+    MOV ES, DI
+    INT 0x10
 
-    BOCHS_MAGIC_BREAK
-_loop:
-    JMP _loop
+_retry:
+; Read From Hard disk for loader
+    NOP
+    MOV AH, 0x02
+    MOV AL, LOADER_SECTOR_SIZE
+    MOV BX, LOADER_START_ADDR
+    MOV CH, 0x00
+    MOV CL, 0x02
+    MOV DH, 0x00
+    MOV DL, 0x80
+    MOV DI, 0x0000
+    MOV ES, DI
+    INT 0x13
+; According BIOS Manual if carry that means error occurs and try again without 
+; Save error message
+    JC _retry
 
-loader_info:
-    DB "Bootloader setting up..."
-loader_info_len:
-    DW $ - loader_info
+; Create Some Delay
+    NOP
+    NOP
+; Print Successful Information
+    MOV AH, 0x13
+    MOV AL, 0x01
+    MOV BH, 0x00
+    MOV BL, 0b00001111
+    MOV BP, success_info
+    MOV CX, DS:[success_info_len]
+    MOV DH, 0x02
+    MOV DL, 0x00
+    MOV SI, 0x0000
+    MOV ES, SI
+    INT 0x10
+; Unconditional Jump to the loader address 0x0000:0x0900
+    JMP 0x0000:LOADER_START_ADDR
+
+; Boot Data Segment
+    loader_info:
+        DB "Bootloader setting up..."
+    loader_info_len:
+        DW $ - loader_info
+    disk_info:
+        DB "Reading OS loader from hard disk ..."
+    disk_info_len:
+        DW $ - disk_info
+    success_info:
+        DB "Reading OS loader Successfully !!! "
+    success_info_len:
+        DW $ - success_info
 TIMES 510 - ($ - $$) DB 0x00
 DB 0x55, 0xAA
 

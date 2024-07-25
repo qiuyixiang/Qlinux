@@ -74,6 +74,9 @@ BITS			:=	32
 AS_SYNTAX		:=	intel
 HARD_DISK_SIZE	:=	64M
 
+BOOT_SECTOR_SIZE	:=	1
+LOADER_SECTOR_SIZE	:=	2
+
 GCC_FLAGS		:=	
 LD_FLAGS		:=	
 NASM_FLAGS		:=	-f bin -Wall

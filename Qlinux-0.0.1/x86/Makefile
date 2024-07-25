@@ -25,5 +25,5 @@ main: $(DEPENDENCIES)
 # Rules for building boot.o
 boot.bin: $(BOOT_DIR)/boot.S
 	$(call dir_check, $(BUILD_PATH))
-	$(NASM) $(NASM_FLAGS) $< -o $(BUILD_PATH)/$@
+	$(NASM) $(NASM_FLAGS) -I$(BOOT_DIR) $< -o $(BUILD_PATH)/$@
 

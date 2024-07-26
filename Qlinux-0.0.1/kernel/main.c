@@ -12,11 +12,10 @@
 #include <x86/gdt.h>
 #include <kernel/types.h>
 
-
 /// @brief  Main Entry of this project and this function will never return
 void __kernel_main(){
 
-
+    
     while (1){
     
     }

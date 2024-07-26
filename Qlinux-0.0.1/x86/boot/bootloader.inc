@@ -11,6 +11,7 @@
 %define BOOT_START_ADDR         0x7c00
 %define LOADER_START_ADDR       0x0900
 %define KERNEL_START_ADDR       (MAXI_REAL_MODE_ADDRESS + 1)
+%define KERNEL_BASE_ADDR        0x0001
 
 ; Define For Real Mode Data Storgae Memory Address
 %define R_MODE_DATA_AREA            0x0500

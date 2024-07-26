@@ -32,9 +32,6 @@ boot.bin: $(BOOT_DIR)/boot.S $(BOOT_DIR)/bootloader.inc
 loader.bin: $(BOOT_DIR)/loader.S $(BOOT_DIR)/bootloader.inc
 	$(NASM) $(NASM_FLAGS) -I$(BOOT_DIR) $< -o $(BUILD_PATH)/$@
 
-# Rules for building gdt.o
-# gdt.o: $(CPU_DIR)/gdt.c
-# 	$(GCC) -c $(GCC_FLAGS) -I $(INCLUDE_RELATIVE) $< -o $(BUILD_PATH)/$@
-%.o:%.c
-	$(GCC) $(GCC_FLAGS) -c -I $(INCLUDE_RELATIVE) $< -o $(BUILD_PATH)/$@
--include dep.d
+# Rules for building All object File
+%.o: $(CPU_DIR)/%.c
+	$(GCC) -c $(GCC_FLAGS) -I $(INCLUDE_RELATIVE) $< -o $(BUILD_PATH)/$@

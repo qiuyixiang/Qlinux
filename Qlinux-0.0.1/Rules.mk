@@ -76,14 +76,17 @@ HARD_DISK_SIZE	:=	64M
 
 BOOT_SECTOR_SIZE	:=	1
 LOADER_SECTOR_SIZE	:=	2
-KERNEL_SECTOR_SIZE	:=	64
+KERNEL_SECTOR_SIZE	:=	32
+
+KERNEL_MAIN_ENTRY	:=	__kernel_main
+KERNEL_START_ADDR	:=	0x00100000
 
 # Flags For GNU GCC Compiler Collection
 GCC_FLAGS		:=	-std=gnu11 -fno-builtin -ffreestanding -O0 -m32 -nostdinc
 GCC_WARNING		:=	-Wextra  -Wall
-GCC_FLAGS 		+=	$(GCC_WARNING) -M -MF dep.d
+GCC_FLAGS 		+=	$(GCC_WARNING) 
 
-LD_FLAGS		:=	-nolibc -nostdlib -m elf_i386 -EL -fno-common -T $(GLOBAL_SCRIPT)/linker.ld
+LD_FLAGS		:=	-nostdlib -m elf_i386 -e $(KERNEL_MAIN_ENTRY) -Ttext=$(KERNEL_START_ADDR) -EL -T $(GLOBAL_SCRIPT)/linker.ld
 NASM_FLAGS		:=	-f bin -Wall
 AS_FLAGS		:=	-mmnemonic=$(AS_SYNTAX) -msyntax=$(AS_SYNTAX) --warn --$(BITS) -march=$(CPU_ARCH) -mtune=$(CPU_ARCH)
 BOCHS_FLAGS		:=	-f $(GLOBAL_CONFIG)/bochsrc -q

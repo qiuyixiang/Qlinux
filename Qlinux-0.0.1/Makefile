@@ -21,6 +21,7 @@ info:
 	@$(call print, "\\t make all    \\t\\tbuild kernel")
 	@$(call print, "\\t make run    \\t\\tcalling bochs as default emulator")
 	@$(call print, "\\t make dbg    \\t\\tdebugger mode using GDB and qemu \\n")
+	@$(call print, "\\t make clean  \\t\\tclean Generated Target File Dir \\n")
 	@$(call print, "Macros used to control compilation: ")
 	@$(call print, "\\t D=1 \\t\\t\\t Add some GNU debugger information '(D=0 by default)'")
 	@$(call print, "\\t S=0 \\t\\t\\t Show compilation process details '(S=1 by default)'")
@@ -37,19 +38,27 @@ BUILD_USER			:=	$(GLOBAL_BUILD)/user
 BUILD_DRIVER		:=	$(GLOBAL_BUILD)/user
 
 # All of the Object file will be linked here !
-LINKER_DEPEDENCIES	:=	$(BUILD_KERNEL)/main.o
+LINKER_DEPEDENCIES	:=	$(BUILD_KERNEL)/main.o	\
+						$(BUILD_X86)/gdt.o
 
 
 # make all
 all: $(DEPENDENCIES)
 # First Checks Whether the virtual hard disk file exits
+# Link All the object file
 # Second Write Target Binary File To the virtual hard disk file
 ifeq ($(SILENT), 1)
 	@$(call file_check, $(DISK_PATH)/$(DISK_NAME).hd, $(BXIMAGE) $(BXIMAGE_FLAGS))
+	@$(LD) $(LD_FLAGS) $(LINKER_DEPEDENCIES) -o $(GLOBAL_BUILD)/kernel.o
+	@$(OBJCOPY) -O binary $(GLOBAL_BUILD)/kernel.o $(GLOBAL_BUILD)/kernel.bin
+	@$(OBJDUMP) -d $(GLOBAL_BUILD)/kernel.o >> $(GLOBAL_BUILD)/kernel.dump
 	@$(MAKE) write_disk
 else
 	@$(call _path_check)
 	$(call file_check, $(DISK_PATH)/$(DISK_NAME).hd, $(BXIMAGE) $(BXIMAGE_FLAGS))
+	$(LD) $(LD_FLAGS) $(LINKER_DEPEDENCIES) -o $(GLOBAL_BUILD)/kernel.o
+	$(OBJCOPY) -O binary $(GLOBAL_BUILD)/kernel.o $(GLOBAL_BUILD)/kernel.bin
+	$(OBJDUMP) -d $(GLOBAL_BUILD)/kernel.o >> $(GLOBAL_BUILD)/kernel.dump
 	$(MAKE) write_disk
 endif
 	

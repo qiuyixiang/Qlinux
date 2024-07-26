@@ -3,3 +3,6 @@
 #include <x86/gdt.h>
 #include <kernel/types.h>
 
+void init_gdt(){
+    
+}

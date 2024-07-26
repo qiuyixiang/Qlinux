@@ -7,8 +7,10 @@
 ;   - 0x0500 - 0x0900       Saved Hardware information And GTD, IO Data for Kernel use
 
 ; Define For Program Component Address 
+%define MAXI_REAL_MODE_ADDRESS  0xfffff
 %define BOOT_START_ADDR         0x7c00
 %define LOADER_START_ADDR       0x0900
+%define KERNEL_START_ADDR       (MAXI_REAL_MODE_ADDRESS + 1)
 
 ; Define For Real Mode Data Storgae Memory Address
 %define R_MODE_DATA_AREA            0x0500
@@ -31,5 +33,28 @@
 %define LOADER_SECTOR_SIZE          0x02
 %define BOOT_SECTOR_SIZE            0x01
 
-; Definition For the GDT
-%define GDT_DATA_ADDRESS            R_MODE_DATA_AREA
+; Definition For the Global Descriptor
+%define GDT_CON_OFFSET      32
+%define GDT_BASE_ADDRESS(BASE_LOW_16, BASE_MIDDLE_8, BASE_HIGH_8)   ((BASE_LOW_16 << 16) | (BASE_MIDDLE_8 << GDT_CON_OFFSET) \
+                                                                    | (BASE_HIGH_8 << (GDT_CON_OFFSET + 24)))
+%define GDT_LIMIT(LIMIT_LOW_16, LIMIT_HIGH_4)                       (LIMIT_LOW_16 | (LIMIT_HIGH_4 << (GDT_CON_OFFSET + 16)))
+%define GDT_DPL(DPL_2)              (DPL_2 << (GDT_CON_OFFSET + 13))
+%define GDT_G(G_1)                  (G_1 << (GDT_CON_OFFSET + 23))
+%define GDT_P(P_1)                  (P_1 << (GDT_CON_OFFSET + 15))
+%define GDT_S(S_1)                  (S_1 << (GDT_CON_OFFSET + 12))
+%define GDT_TYPE(TYPE_4)            (TYPE_4 << (GDT_CON_OFFSET + 8))
+%define GDT_DB(DB_1)                (DB_1 << (GDT_CON_OFFSET + 22))
+
+
+; Definition For the Global Descriptor Selector
+%define GDS_RPL0        0b00
+%define GDS_RPL1        0b01
+%define GDS_RPL2        0b10
+%define GDS_RPL3        0b11
+%define GDS_GDT         0b000
+%define GDS_LGD         0b100
+%define GD_SELECTOR(INDEX, TI, RPL)     (INDEX << 3) | (TI | RPL)
+
+; Define Macros for Segment Selector
+%define CODE_SEG_SELECTOR       GD_SELECTOR(1, GDS_GDT, GDS_RPL0)
+%define DATA_SEG_SELECTOR       GD_SELECTOR(2, GDS_GDT, GDS_RPL0)

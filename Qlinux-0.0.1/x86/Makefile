@@ -9,24 +9,32 @@ SCRIPT_PATH	:=	../script
 .DEFAULT_GOAL 	:=	main
 
 # Build Path for All Components
-BUILD_PATH		:=	$(GLOBAL_BUILD)/x86
-INCLUDE_X86		:=	$(INCLUDE_X86_ABS)
+BUILD_PATH			:=	$(GLOBAL_BUILD)/x86
+INCLUDE_X86			:=	$(INCLUDE_X86_ABS)
+INCLUDE_RELATIVE	:=	../include
 
 # Different Directory for different Modules
 BOOT_DIR	:=	./boot
 CPU_DIR		:=	./cpu
 
 # All Small Individual Components
-DEPENDENCIES	:=	boot.bin loader.bin
+DEPENDENCIES	:=	boot.bin loader.bin gdt.o
 
 .PHONY: main
 main: $(DEPENDENCIES)
 
 # Rules for building boot.bin
-boot.bin: $(BOOT_DIR)/boot.S
+boot.bin: $(BOOT_DIR)/boot.S $(BOOT_DIR)/bootloader.inc
 	$(call dir_check, $(BUILD_PATH))
 	$(NASM) $(NASM_FLAGS) -I$(BOOT_DIR) $< -o $(BUILD_PATH)/$@
 
 # Rules for building loader.bin
-loader.bin: $(BOOT_DIR)/loader.S
+loader.bin: $(BOOT_DIR)/loader.S $(BOOT_DIR)/bootloader.inc
 	$(NASM) $(NASM_FLAGS) -I$(BOOT_DIR) $< -o $(BUILD_PATH)/$@
+
+# Rules for building gdt.o
+# gdt.o: $(CPU_DIR)/gdt.c
+# 	$(GCC) -c $(GCC_FLAGS) -I $(INCLUDE_RELATIVE) $< -o $(BUILD_PATH)/$@
+%.o:%.c
+	$(GCC) $(GCC_FLAGS) -c -I $(INCLUDE_RELATIVE) $< -o $(BUILD_PATH)/$@
+-include dep.d

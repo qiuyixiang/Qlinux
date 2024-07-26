@@ -35,5 +35,8 @@ typedef signed long long    _k_int_64;
 
 #endif
 
+#define __ASM__                 __asm__
+#define __VOLATILE__            volatile
+#define __INLINE_ASM__          __ASM__ __VOLATILE__
 
 #endif

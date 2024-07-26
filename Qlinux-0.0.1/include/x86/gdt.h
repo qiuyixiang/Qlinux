@@ -14,8 +14,10 @@
 // Global Descriptor Macros 
 
 // Single New Type For Global Descriptor with fixed size : 8 bytes
-#define __GD_TYPE          unsigned long long
-
+// And this macro is just used as type-cast
+#define __GD_TYPE               unsigned long long
+// Because of the simplicity of this kernel, only 16 Global descriptor is enough to use.
+#define __GDT_SIZE              16
 
 /* Segment Base Address */
 // Set Segment Base Address
@@ -72,25 +74,35 @@
 #define _GD_REVERSED_DEFAULT    0
 #define _GD_SET_SEG_REVERSED_FLAG(_SEG_REVERSED_FLAG)   ((__GD_TYPE)_SEG_REVERSED_FLAG << (_GD_BASE_OFFSET + 20))
 
-/* Segment granularity flag*/
+/* Segment granularity flag */
 #define _GD_G_BYTE      0
 #define _GB_G_4KB       1
 #define _GD_SET_SEG_G(_SEG_G)                           ((__GD_TYPE)_SEG_G << (_GD_BASE_OFFSET + 23))
 
-/* Segment descriptor privilege level flag*/
+/* Segment descriptor privilege level flag */
 #define _GD_DPL_0       0b00
 #define _GD_DPL_1       0b01
 #define _GD_DPL_2       0b10
 #define _GD_DPL_3       0b11
 #define _GD_SET_SEG_DPL(_SEG_DPL)                       ((__GD_TYPE)_SEG_DPL << (_GD_BASE_OFFSET + 13))
 
-/* Segment Contain 64-bits Coding flags*/
+/* Segment Contain 64-bits Coding flags */
 #define _GD_BIT64       1
 #define _GD_BIT32       0
 #define _GD_SET_SEG_BIT64(_SEG_BIT64)                   ((__GD_TYPE)_SEG_BIT64 << (_GD_BASE_OFFSET + 21))
 
 /* Segment Default Operation Size */
+#define _GD_DB_BIT16    0
+#define _GD_DB_BIT32    1
 #define _GD_SET_SEG_DB(_SEG_DB)                         ((__GD_TYPE)_SEG_DB << (_GD_BASE_OFFSET + 22))
 
+// Type Define For Global Descriptor Table
+typedef unsigned long long      _gd_t;
+typedef unsigned long long*     _gd_ptr_t;
+
+/// @brief This is the global static array of GDT
+/// Access this array through include the header file
+/// This Special Data Structure is part of kernel
+extern _gd_t __gdt[__GDT_SIZE];
 
 #endif

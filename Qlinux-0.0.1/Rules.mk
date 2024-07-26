@@ -47,7 +47,7 @@ else
 	TOOLCHAIN_PREFIX	:=	x86_64-elf-
 endif
 
-CXX			:=		$(TOOLCHAIN_PREFIX)gcc
+GCC			:=		$(TOOLCHAIN_PREFIX)gcc
 AS			:=		$(TOOLCHAIN_PREFIX)as
 LD			:=		$(TOOLCHAIN_PREFIX)ld
 CPP			:=		$(TOOLCHAIN_PREFIX)gcc -E 
@@ -66,7 +66,7 @@ else
 	EMULATOR	:=	$(E)
 endif
 
-export CXX AS LD CPP OBJCOPY OBJDUMP NASM
+export GCC AS LD CPP OBJCOPY OBJDUMP NASM
 
 # Switch Flags For Compilation
 CPU_ARCH		:=	i686
@@ -76,9 +76,14 @@ HARD_DISK_SIZE	:=	64M
 
 BOOT_SECTOR_SIZE	:=	1
 LOADER_SECTOR_SIZE	:=	2
+KERNEL_SECTOR_SIZE	:=	64
 
-GCC_FLAGS		:=	
-LD_FLAGS		:=	
+# Flags For GNU GCC Compiler Collection
+GCC_FLAGS		:=	-std=gnu11 -fno-builtin -ffreestanding -O0 -m32 -nostdinc
+GCC_WARNING		:=	-Wextra  -Wall
+GCC_FLAGS 		+=	$(GCC_WARNING) -M -MF dep.d
+
+LD_FLAGS		:=	-nolibc -nostdlib -m elf_i386 -EL -fno-common -T $(GLOBAL_SCRIPT)/linker.ld
 NASM_FLAGS		:=	-f bin -Wall
 AS_FLAGS		:=	-mmnemonic=$(AS_SYNTAX) -msyntax=$(AS_SYNTAX) --warn --$(BITS) -march=$(CPU_ARCH) -mtune=$(CPU_ARCH)
 BOCHS_FLAGS		:=	-f $(GLOBAL_CONFIG)/bochsrc -q

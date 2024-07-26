@@ -30,6 +30,16 @@ info:
 
 .PHONY: all $(DEPENDENCIES) run dbg
 
+# Define Build Path:
+BUILD_KERNEL		:=	$(GLOBAL_BUILD)/kernel
+BUILD_X86			:=	$(GLOBAL_BUILD)/x86
+BUILD_USER			:=	$(GLOBAL_BUILD)/user
+BUILD_DRIVER		:=	$(GLOBAL_BUILD)/user
+
+# All of the Object file will be linked here !
+LINKER_DEPEDENCIES	:=	$(BUILD_KERNEL)/main.o
+
+
 # make all
 all: $(DEPENDENCIES)
 # First Checks Whether the virtual hard disk file exits
@@ -53,9 +63,9 @@ run:
 # Finally Run the Emulator
 	$(EMULATOR) $(BOCHS_FLAGS)
 
-# make dbg
+# make dbg (May Be Not Avaiable in ARM Mac OS)
 dbg:
-
+# DOTO Implement Debugger Mode With Qemu And GDB
 
 # Build For User Component
 user:
@@ -94,9 +104,9 @@ endif
 .PHONY: clean
 clean:
 ifeq ($(SILENT), 1)
-	@rm -rf ./build
+	@rm -rf ./build */*.d
 else
-	rm -rf $(GLOBAL_BUILD)
+	rm -rf $(GLOBAL_BUILD) */*.d
 endif
 
 # Write Binary File To the Virtual Disk

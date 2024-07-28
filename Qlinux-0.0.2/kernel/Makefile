@@ -19,7 +19,7 @@ OBJECTS	:=	$(BUILD_PATH)/main.o
 DEPEDENT_INCLUDE_DIR	:=	$(wildcard $(DEPEDENCIES_PATH)/*.d)
 
 
-.PHONY: make_kernel 
+.PHONY: make_kernel
 # Main Target
 make_kernel: $(OBJECTS)
 

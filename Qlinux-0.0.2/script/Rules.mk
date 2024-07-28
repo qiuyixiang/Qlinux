@@ -40,6 +40,8 @@ ARCH_GLOBAL_PATH		:=	./arch
 LIB_GLOBAL_PATH			:=	./lib
 SCRIPT_GLOBAL_PATH		:=	./script
 USER_GLOBAL_PATH		:=  ./user
+CONFIG_GLOBAL_PATH		:=	./config
+ISO_GLOBAL_PATH			:=	./iso
 
 # Definition For GNU Tool Chain
 GCC			:=		$(TOOLCHAIN_PREFIX)gcc
@@ -58,22 +60,24 @@ GRUB_PREFIX		:=	grub-
 GRUB_FILE		:= 	$(GRUB_PREFIX)file
 GRUB_MKRESCUE	:=	$(GRUB_PREFIX)mkrescue 
 BOCHS			:=	bochs
-QEMU			:=	qemu
+QEMU			:=	qemu-system-$(ARCH)
 
 # GNU Compilation Flags
 ifeq ($(DEBUGGER),1)
 GCC_FLAGS		:=	-O0
 else
-GCC_FLAGS		:=	-O3
-endif 
+GCC_FLAGS		:=	-O2
+endif
+
 GCC_FLAGS		+=	-Wall -Wextra
 GCC_FLAGS		+=	-std=gnu99 -m32
-GCC_FLAGS		+=	-fno-builtin -fno-builtin-function -ffreestanding -fhosted
+GCC_FLAGS		+=	-fno-builtin -fno-builtin-function -ffreestanding
 GCC_FLAGS		+=	-nostdlib -nolibc -nostdinc
+GCC_MACRO_FLAGS	:=	
 
 # LD Linker Flags
-LD_FLAGS		:=	-m elf_i386 -EL 
-LD_FLAGS		+=	-nostdlib -nolibc -nodefaultlibs -nostartfiles
+LD_FLAGS		:=	-m elf_$(ARCH) -EL
+LD_FLAGS		+=	-nostdlib
 LD_FLAGS		+=	-T $(SCRIPT_GLOBAL_PATH)/linker.ld
 
 # AS Assembler Flags
@@ -87,6 +91,18 @@ GCC_FLAGS		+=	-g
 AS_FLAGS		+=	-D --gstabs
 endif
 
+##### Configuration For GNU GCC Macros
+
+# MultiBoot Version Configuration Macro
+MULTIBOOT_V1		:=	1
+MULTIBOOT_V2		:=	2
+MULTIBOOT_VERSION	:=	$(MULTIBOOT_V1)
+
+MULTIBOOT			:=	__MULTIBOOT_VERSION__
+GCC_MACRO_FLAGS		+=	-D $(MULTIBOOT)=$(MULTIBOOT_VERSION)
+
+ 
+GCC_FLAGS		+=	$(GCC_MACRO_FLAGS)
 export GCC_FLAGS
 export LD_FLAGS
 export AS_FLAGS

@@ -12,6 +12,7 @@
 
 #include <kernel/types.h>
 #include <arch/i386/multiboot.h>
+#include <arch/monitor/vga.h>
 
 /* Kernel Initialization Function Specification
 *  This Function will Initialized Some Firmware and Hardware Driver
@@ -21,6 +22,12 @@
 */  
 void _kernel_init_(uint32_t __mb_verify, uint32_t* __mb_info_tb){
 
+    // Initialize VGA Monitor
+    vga_init(VGA_THEME_DARK);
+    vga_put_string("[INIT] \tVGA Text Display Mode Initialized Successfully \n");
+    if (__mb_verify == MB_CHECK_SUCCESS)
+        vga_put_string("[CHECK]\tMultiBoot Header CHECKSUM Check Finished !\n");
+    
     while (1)
     {
         

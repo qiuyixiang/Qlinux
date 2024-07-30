@@ -32,15 +32,14 @@ void _kernel_init_(uint32_t __mb_verify, uint32_t* __mb_info_tb){
     // Check MultiBoot Success Flags
     if (__mb_verify == MB_CHECK_SUCCESS)
         vga_put_string("[CHECK]\tMultiBoot Header CHECKSUM Check Finished !\n");
-    // Initialize Global Descriptor Table
+    // Initialize Global Descriptor Table And Update Segment Selectors
     gdt_init();
     gdtr_t * gdtr_register = gdt_get_gdtr();
     if (gdtr_register->_gdtr_limit == gdt_get_limit() && gdtr_register->_gdtr_base_addr == (uint32_t)gdt_get_addr())
         vga_put_string("[INIT]\tGlobal Descriptor Initialized Successfully \n");
     else
         vga_put_string("[ERROR]\tGlobal Descriptor Initialized Failed Try It Again Later !!!\n");
-
-    
+    vga_put_string("[INIT]\tSegment Register Selector Initialized Successfully \n");
     (void)__mb_info_tb;
     while (1)
     {

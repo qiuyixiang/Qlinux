@@ -27,7 +27,8 @@ SRC_MONITOR				:=	./monitor
 ###### Objects File List
 # Objects File List Need To Build
 OBJECTS			:=		$(BUILD_PATH)/vga.o	\
-						$(BUILD_PATH)/gdt.o
+						$(BUILD_PATH)/gdt.o \
+						$(BUILD_PATH)/cpu.o
 
 DEPEDENT_INCLUDE_DIR	:=	$(wildcard $(DEPEDENCIES_PATH)/*.d)
 

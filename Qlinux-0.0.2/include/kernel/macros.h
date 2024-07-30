@@ -11,6 +11,6 @@
 
 // Assembly Related Macros
 #define __INLINE_ASM__(_INSTRUCTION)        __asm__ volatile(_INSTRUCTION)
-#define __ASM_BOCHS_DEBUGGER__              __INLINE_ASM__("xchg %bx, %bx");
+#define __ASM_BOCHS_DEBUGGER__              __asm__ volatile("xchg %bx, %bx");
 
 #endif

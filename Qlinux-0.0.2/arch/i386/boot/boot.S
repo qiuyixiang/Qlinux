@@ -46,7 +46,7 @@ _start:
     pushl %ebx
     pushl %eax
     call _kernel_init_
-
+    
     # Because return from _kernel_init is meaningless so just wait for power off
     cli
 _hlt:

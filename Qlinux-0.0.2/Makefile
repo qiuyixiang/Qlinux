@@ -31,7 +31,8 @@ BUILD_DEPEDENCIES	:=	$(BUILD_GLOBAL_PATH)/dep
 OBJS				:=	$(BUILD_ARCH)/boot.o 	\
 						$(BUILD_KERNEL)/main.o 	\
 						$(BUILD_ARCH)/vga.o		\
-						$(BUILD_ARCH)/gdt.o
+						$(BUILD_ARCH)/gdt.o		\
+						$(BUILD_ARCH)/cpu.o
 
 # Check For Building Path
 $(BUILD_ARCH):

@@ -88,14 +88,14 @@ extern void gdt_set_index(uint16_t _index, uint32_t _base_addr,
 
     /* Base Address Field OF Global Descriptor */
     #define _GD_BASE_LOW(BASE_ADDR)         ((BASE_ADDR & 0xffff) << 16)
-    #define _GD_BASE_MIDDLE(BASE_ADDR)      ((_GDT_CAST_TYPE)(BASE_ADDR & 0xff0000) << (_GDT_OFF_FIELD + 0))
-    #define _GD_BASE_HIGH(BASE_ADDR)        ((_GDT_CAST_TYPE)(BASE_ADDR & 0xff000000) << (_GDT_OFF_FIELD + 24))
+    #define _GD_BASE_MIDDLE(BASE_ADDR)      ((_GDT_CAST_TYPE)((BASE_ADDR & 0xff0000) >> 16) << (_GDT_OFF_FIELD + 0))
+    #define _GD_BASE_HIGH(BASE_ADDR)        ((_GDT_CAST_TYPE)((BASE_ADDR & 0xff000000) >> 24) << (_GDT_OFF_FIELD + 24))
     #define _GD_BASE_ADDR(BASE_ADDR)        (_GD_BASE_LOW(BASE_ADDR) | _GD_BASE_MIDDLE(BASE_ADDR) \
                                             | _GD_BASE_HIGH(BASE_ADDR))
 
     /* Limit Field OF Global Descriptor */
     #define _GD_LIMIT_LOW(LIMIT_SIZE)       (LIMIT_SIZE & 0xffff)
-    #define _GD_LIMIT_HIGH(LIMIT_SIZE)      ((_GDT_CAST_TYPE)(LIMIT_SIZE & 0xf0000) << (_GDT_OFF_FIELD + 16))
+    #define _GD_LIMIT_HIGH(LIMIT_SIZE)      ((_GDT_CAST_TYPE)((LIMIT_SIZE & 0xf0000) >> 16) << (_GDT_OFF_FIELD + 16))
     #define _GD_LIMIT(LIMIT_SIZE)           (_GD_LIMIT_LOW(LIMIT_SIZE) | _GD_LIMIT_HIGH(LIMIT_SIZE))
 
     #define _GD_SET_L(FIELD_L)              ((_GDT_CAST_TYPE)FIELD_L << (_GDT_OFF_FIELD + 21))

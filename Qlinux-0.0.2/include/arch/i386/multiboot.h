@@ -1,8 +1,10 @@
+// Copyright (C) QIUYIXIANG
+//
 // This File Define Some Information About GNU MultiBoot 0.96 Specification
 // Current File Using GNU GRUB Legacy
 // these macros may be used by the kernel and the boot header
-// @date 07-28-2024
-// @copyright (C) QIUYIXIANG
+// Date 07-28-2024
+
 
 #ifndef __ARCH_I386_MULTIBOOT_H__
 #define __ARCH_I386_MULTIBOOT_H__  1

@@ -30,7 +30,8 @@ BUILD_DEPEDENCIES	:=	$(BUILD_GLOBAL_PATH)/dep
 
 OBJS				:=	$(BUILD_ARCH)/boot.o 	\
 						$(BUILD_KERNEL)/main.o 	\
-						$(BUILD_ARCH)/vga.o
+						$(BUILD_ARCH)/vga.o		\
+						$(BUILD_ARCH)/gdt.o
 
 # Check For Building Path
 $(BUILD_ARCH):
@@ -91,12 +92,16 @@ iso:
 	$(call execute, $(GRUB_MKRESCUE) $(ISO_GLOBAL_PATH) -o $(ISO_GLOBAL_PATH)/$(OS_NAME).iso)
 	$(call print, "Building ISO Image File in : $(ISO_GLOBAL_PATH)/$(OS_NAME).iso")
 
+# Link Objects
+_link: $(OBJECTS)
+	$(call execute, $(LD) $(LD_FLAGS) $(OBJS) -o $(BUILD_GLOBAL_PATH)/$(OS_NAME).bin)
+
 # Main Build Receipt all
 all: $(BUILD_DEPEDENCIES) $(MODULES)
 ifeq ($(SILENT), 0)
 	$(MAKE) $(CONFIG)
 endif
-	$(call execute, $(LD) $(LD_FLAGS) $(OBJS) -o $(BUILD_GLOBAL_PATH)/$(OS_NAME).bin)
+	$(call execute, $(MAKE) _link)
 	@if $(GRUB_FILE) --is-x86-multiboot $(BUILD_GLOBAL_PATH)/$(OS_NAME).bin; then \
 		echo "[CONFIRM] Multiboot compatible file confirmed !"; \
 	else \

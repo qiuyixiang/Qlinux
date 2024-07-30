@@ -33,6 +33,7 @@ typedef enum __vga_color_attr_{
 #define VGA_THEME_LIGHT     0
 #define VGA_THEME_DARK      1
 
+
 // Define VGA Function Interfaces
 extern void vga_init(uint8_t _default_theme);
 extern void vga_set_color(_vga_color _font_color,  _vga_color _back_ground_color);

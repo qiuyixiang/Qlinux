@@ -37,13 +37,16 @@ static inline void __vga_set_color(uint8_t __color){
     current_vga_color = __color;
 }
 static inline void scroll_up(uint32_t __num){
+    (void)__num;
     /// TODO
 }
 static inline void scroll_down(uint32_t __num){
+    (void)__num;
     /// TODO
 }
 
 /// Public Interfaces Implementation
+
 inline void vga_set_color(_vga_color _font_color,  _vga_color _back_ground_color){
     current_vga_color = (_back_ground_color << 4) | _font_color;
 }

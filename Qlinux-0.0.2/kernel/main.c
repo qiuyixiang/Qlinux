@@ -10,8 +10,12 @@
 * @Date 07-28-2024
 */
 
+// kernel Related Header Files
 #include <kernel/types.h>
+
+// Architecture Related Header Files
 #include <arch/i386/multiboot.h>
+#include <arch/i386/gdt.h>
 #include <arch/monitor/vga.h>
 
 /* Kernel Initialization Function Specification
@@ -24,10 +28,20 @@ void _kernel_init_(uint32_t __mb_verify, uint32_t* __mb_info_tb){
 
     // Initialize VGA Monitor
     vga_init(VGA_THEME_DARK);
-    vga_put_string("[INIT] \tVGA Text Display Mode Initialized Successfully \n");
+    vga_put_string("[INIT]\tVGA Text Display Mode Initialized Successfully \n");
+    // Check MultiBoot Success Flags
     if (__mb_verify == MB_CHECK_SUCCESS)
         vga_put_string("[CHECK]\tMultiBoot Header CHECKSUM Check Finished !\n");
+    // Initialize Global Descriptor Table
+    gdt_init();
+    gdtr_t * gdtr_register = gdt_get_gdtr();
+    if (gdtr_register->_gdtr_limit == gdt_get_limit() && gdtr_register->_gdtr_base_addr == (uint32_t)gdt_get_addr())
+        vga_put_string("[INIT]\tGlobal Descriptor Initialized Successfully \n");
+    else
+        vga_put_string("[ERROR]\tGlobal Descriptor Initialized Failed Try It Again Later !!!\n");
+
     
+    (void)__mb_info_tb;
     while (1)
     {
         

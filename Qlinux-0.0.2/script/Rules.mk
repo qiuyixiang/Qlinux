@@ -69,7 +69,7 @@ else
 GCC_FLAGS		:=	-O2
 endif
 
-GCC_FLAGS		+=	-Wall -Wextra
+GCC_FLAGS		+=	-Wall -Wextra -Wshadow
 GCC_FLAGS		+=	-std=gnu99 -m32
 GCC_FLAGS		+=	-fno-builtin -fno-builtin-function -ffreestanding
 GCC_FLAGS		+=	-nostdlib -nolibc -nostdinc

@@ -26,7 +26,8 @@ SRC_MONITOR				:=	./monitor
 
 ###### Objects File List
 # Objects File List Need To Build
-OBJECTS			:=		$(BUILD_PATH)/vga.o
+OBJECTS			:=		$(BUILD_PATH)/vga.o	\
+						$(BUILD_PATH)/gdt.o
 
 DEPEDENT_INCLUDE_DIR	:=	$(wildcard $(DEPEDENCIES_PATH)/*.d)
 
@@ -55,6 +56,10 @@ $(BUILD_PATH)/%.o:$(SRC_I386_BOOT)/%.S
 # Build For Monitor
 $(BUILD_PATH)/%.o:$(SRC_MONITOR)/%.c
 	$(call execute, $(GCC) $(GCC_FLAGS) -c $(GCC_INCLUDE_FLAGS) -MD -MF $(DEPEDENCIES_PATH)/$*.d $< -o $@)
+
+# Build For CPU
+$(BUILD_PATH)/%.o:$(SRC_I386_CPU)/%.c
+	$(call execute, $(GCC) $(GCC_FLAGS) -c $(GCC_INCLUDE_FLAGS) -MD -MF $(DEPEDENCIES_PATH)/$*.d  $< -o $@)
 
 -include $(DEPEDENT_INCLUDE_DIR)
 

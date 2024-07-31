@@ -28,7 +28,7 @@ extern void gdt_init(void);
 extern uint64_t* gdt_get_addr(void);
 extern uint16_t gdt_get_limit(void);
 extern gdtr_t* gdt_get_gdtr(void);
-extern void gdt_set_index(uint16_t _index, uint32_t _base_addr, 
+extern void gdt_set_index(uint16_t _index, uint32_t _base_addr,
                           uint32_t _limit, uint8_t _dpl,
                           uint8_t _type, uint8_t _S);
 

@@ -1,6 +1,6 @@
 # Makefile Rules And General Functions For The Project 
-# @Copyright Copyright (C) QIUYIXIANG
-# date: 07-27-2024
+# Copyright (C) QIUYIXIANG
+# Date: 07-27-2024
 # This Makefile Rules All used for Main Makefile Except some Special Global Tools
 # These Tools will export to the sub-makefile for more utility
 

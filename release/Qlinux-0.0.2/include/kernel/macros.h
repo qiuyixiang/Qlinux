@@ -1,5 +1,5 @@
 /*
-* Copyright Copyright (C) QIUYIXIANG
+* Copyright (C) QIUYIXIANG
 *
 * This File Define Some General Macros For Qlinux
 * Include Test Macros, Info Macros and ASM Macros

@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+#define __ASM_FILE__    1
+
 #if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 1)
 #include <arch/i386/multiboot.h>
 #endif
@@ -29,6 +31,18 @@
 #if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 2)
 #include <arch/i386/multiboot2.h>
 #endif
+
+
+.section multiboot
+
+.section .bss
+
+.section .text
+.global _start
+.type _start, @function
+
+_start:
+    movl %ebp, %esp
 
 
 

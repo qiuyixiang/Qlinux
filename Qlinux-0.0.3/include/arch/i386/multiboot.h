@@ -27,10 +27,12 @@
 #ifndef __ARCH_I386_MULTIBOOT_H__
 #define __ARCH_I386_MULTIBOOT_H__   1
 
-#include <kernel/type.h>
+#ifndef __ASM_FILE__
 
+#include <kernel/type.h>
 
 #endif
 
 
+#endif
 

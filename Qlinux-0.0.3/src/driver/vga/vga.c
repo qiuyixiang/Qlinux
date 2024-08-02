@@ -22,20 +22,3 @@
  * SOFTWARE.
  */
 
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 1)
-#include <arch/i386/multiboot.h>
-#endif
-
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 2)
-#include <arch/i386/multiboot2.h>
-#endif
-
-
-
-
-
-
-
-
-
-

@@ -22,20 +22,9 @@
  * SOFTWARE.
  */
 
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 1)
-#include <arch/i386/multiboot.h>
+#ifndef __DRIVER_VGA_VAG_H__
+#define __DRIVER_VGA_VAG_H__    1
+
+extern void vga_init(void);
+
 #endif
-
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 2)
-#include <arch/i386/multiboot2.h>
-#endif
-
-
-
-
-
-
-
-
-
-

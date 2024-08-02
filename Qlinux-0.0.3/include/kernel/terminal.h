@@ -22,20 +22,11 @@
  * SOFTWARE.
  */
 
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 1)
-#include <arch/i386/multiboot.h>
-#endif
+#ifndef __KERNEL_TERMINAL_H__
+#define __KERNEL_TERMINAL_H__   1
 
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 2)
-#include <arch/i386/multiboot2.h>
-#endif
+// Public Function Interface For Kernel Main
+extern void terminal_init(void);
 
 
-
-
-
-
-
-
-
-
+#endif 

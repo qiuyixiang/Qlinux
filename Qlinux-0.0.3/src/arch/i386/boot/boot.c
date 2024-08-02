@@ -22,20 +22,11 @@
  * SOFTWARE.
  */
 
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 1)
-#include <arch/i386/multiboot.h>
-#endif
+#include <arch/i386/boot.h>
 
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 2)
-#include <arch/i386/multiboot2.h>
-#endif
+void boot_init(uint32_t _mb_checksum, uint32_t * _mb_info_table){
+    if (_mb_checksum){
 
-
-
-
-
-
-
-
-
-
+    }
+    (void)_mb_info_table;
+}

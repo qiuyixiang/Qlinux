@@ -22,20 +22,16 @@
  * SOFTWARE.
  */
 
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 1)
-#include <arch/i386/multiboot.h>
+
+#ifndef __KERNEL_CONFIG_H__
+#define __KERNEL_CONFIG_H__     1
+
+// These Macros are just use ignore Visual Studio waring
+/// These Macros Will Be Commented After Development
+#define __CXX_ARCH__                i386
+#define __CXX_DISPLAY_VGA__         1
+#define __CXX_MULTIBOOT__           1
+
+
+
 #endif
-
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 2)
-#include <arch/i386/multiboot2.h>
-#endif
-
-
-
-
-
-
-
-
-
-

@@ -77,6 +77,11 @@ MACROS_MULTIBOOT	:=		-D __CXX_MULTIBOOT__=$(MACRO_MULTIBOOT)
 # Architecture Macro
 MACRO_ARCH			:=		-D __CXX_ARCH__=$(ARCH)
 
+# Hardware Driver Macro
+DISPLAY_DRIVER		:=		__CXX_DISPLAY_VGA__
+MACRO_DISPLAY		:=		-D $(__CXX_DISPLAY_VGA__)=1
+
+
 CC_MACROS			:=		$(MACROS_MULTIBOOT) \
 							$(MACRO_ARCH)
 

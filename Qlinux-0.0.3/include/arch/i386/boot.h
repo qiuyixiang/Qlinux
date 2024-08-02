@@ -22,20 +22,22 @@
  * SOFTWARE.
  */
 
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 1)
-#include <arch/i386/multiboot.h>
-#endif
+#ifndef __ARCH_I386_BOOT_H__
+#define __ARCH_I386_BOOT_H__   1
 
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 2)
+#include <kernel/type.h>
+
+#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ != 0)
+// Include MultiBoot Header 
+#if (__CXX_MULTIBOOT__ == 1)
+#include <arch/i386/multiboot.h>
+#endif 
+#if (__CXX_MULTIBOOT__ == 2)
 #include <arch/i386/multiboot2.h>
 #endif
 
+#endif
 
+extern void boot_init(uint32_t _mb_checksum, uint32_t * _mb_info_table);
 
-
-
-
-
-
-
-
+#endif

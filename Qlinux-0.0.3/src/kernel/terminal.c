@@ -1,6 +1,5 @@
 /**
  * Copyright (C) 2024 QIUYIXIANG
- * Project : Qlinux
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +21,16 @@
  * SOFTWARE.
  */
 
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 1)
-#include <arch/i386/multiboot.h>
-#endif
+#include <kernel/config.h>
 
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 2)
-#include <arch/i386/multiboot2.h>
-#endif
+#include <kernel/terminal.h>
 
-
-
+// Low Layer Hardware Driver Header
+#if defined(__CXX_DISPLAY_VGA__) && (__CXX_DISPLAY_VGA__ == 1)
+#include <driver/vga/vga.h>
+#endif 
 
 
+void terminal_init(void){
 
-
-
-
-
+}

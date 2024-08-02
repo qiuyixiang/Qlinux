@@ -1,7 +1,7 @@
 # Copyright (C) QIUYIXING
 
 # Date 08/02/2024
-# Main Makefile For Qlinux
+# Main Makefile For Qlinux Using GNU Make
 
 # Path Declaration
 CUR_DIR			:=	$(CURDIR)
@@ -104,5 +104,12 @@ iso: $(KERNEL)
 
 clean:
 	$(call execute, rm -rf $(BUILD_DIR))
+
+# This target make no sense just for git push
+DATE :=	$(shell date)
+git:
+	@git add .
+	@git commit -m "$(DATE)"
+	@git push
 
 -include $(DEPEDENCIES_LIST)

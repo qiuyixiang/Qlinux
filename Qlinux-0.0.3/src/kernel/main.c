@@ -46,6 +46,8 @@ void kernel_main(uint32_t _mb_checksum, uint32_t * _mb_info_table)
 void kernel_main(uint32_t * _boot_info_table)
 #endif
 {
+    /// Initialize Terminal Device
+    terminal_init();
 #if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ != 0)
     /// BootLoader Configuration (Only for Multiboot)
     boot_init(_mb_checksum, _mb_info_table);
@@ -55,8 +57,9 @@ void kernel_main(uint32_t * _boot_info_table)
     /// Initialize CPU State
     cpu_init();
 
-    /// Initialize Terminal Device
-    terminal_init();
+    while (1){
+        
+    }
     
 }
 

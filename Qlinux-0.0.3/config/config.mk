@@ -46,9 +46,14 @@ LD			:=		$(TOOLCHAIN_PREFIX)ld
 OBJDUMP		:=		$(TOOLCHAIN_PREFIX)objdump
 OBJCOPY		:=		$(TOOLCHAIN_PREFIX)objcopy
 EMULATOR	:=		$(EMULATOR)
-BOCHS		:=		$(BOCHS)
+BOCHS		:=		bochs
 QEMU		:=		qemu-system-$(CPU)
 GRUB		:=		grub-
+
+GRUB_FILE		:=		$(GRUB)file
+GRUB_MKRESCUE	:=		$(GRUB)mkrescue
+
+GRUB_FILE_F		:=	
 
 
 # GCC CC Flags
@@ -99,6 +104,12 @@ AS_FLAGS		+=	-msyntax=att -mmnemonic=att
 
 ifeq ($(DEBUG), 1)
 AS_FLAGS		+=	--gstabs -g
+endif 
+
+ifeq ($(MACRO_MULTIBOOT), 1)
+GRUB_FILE_F		+=	--is-x86-multiboot
+else
+GRUB_FILE_F		+=	--is-x86-multiboot2
 endif 
 
 

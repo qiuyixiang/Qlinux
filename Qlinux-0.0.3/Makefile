@@ -10,6 +10,7 @@ INCLUDE_DIR		:=	./include
 SRC_DIR			:=	./src
 BUILD_DIR		:=	./build
 SCRIPT_DIR		:=	./script
+ISO_DIR			:=	./iso
 DEPDENT_DIR		:=	$(BUILD_DIR)/dep
 
 -include $(CONFIG_DIR)/config.mk
@@ -40,26 +41,26 @@ SOURCE_LIST		:=	$(shell find $(SRC_DIR) -name "*[$(POSTFIX_LIST)]" -type f ! -pa
 SOURCE_LIST		+=	$(shell find $(ARCH_DIR) -type f -name "*[$(POSTFIX_LIST)]")
 
 # Object File List
-OBJECTS_LIST	=	$(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SOURCE_LIST))
-OBJECTS_LIST	:=	$(patsubst $(SRC_DIR)/%.S, $(BUILD_DIR)/%.o, $(OBJECTS_LIST))
-OBJECTS_LIST	:=	$(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.o, $(OBJECTS_LIST))
+OBJECTS_LIST	=	$(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.c.o, $(SOURCE_LIST))
+OBJECTS_LIST	:=	$(patsubst $(SRC_DIR)/%.S, $(BUILD_DIR)/%.S.o, $(OBJECTS_LIST))
+OBJECTS_LIST	:=	$(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/%.cpp.o, $(OBJECTS_LIST))
 
 # Build Rules For All Objects File
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+$(BUILD_DIR)/%.c.o: $(SRC_DIR)/%.c
 ifeq ($(SILENT), 1)
 	$(call print, "+ CC \\t\\t $@")
 endif
 	$(call execute, $(call check_dir, $(dir $@)))
 	$(call execute, $(CC) $(CC_FLAGS) -I $(INCLUDE_DIR) -MD -MF $(DEPDENT_DIR)/$(basename $(notdir $@)).d -c $< -o $@)
 	
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.S
+$(BUILD_DIR)/%.S.o: $(SRC_DIR)/%.S
 ifeq ($(SILENT), 1)
 	$(call print, "+ AS \\t\\t $@")
 endif
 	$(call execute, $(call check_dir, $(dir $@)))
 	$(call execute, $(CC) $(CC_FLAGS) -I $(INCLUDE_DIR) -MD -MF $(DEPDENT_DIR)/$(basename $(notdir $@)).d -c $< -o $@)
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(BUILD_DIR)/%.cpp.o: $(SRC_DIR)/%.cpp
 	$(error Doesn't Support For Compile C++ Source File Now !)
 ifeq ($(SILENT), 1)
 	$(call print, "+ CXX \\t\\t $@")
@@ -100,10 +101,23 @@ all: $(ALL_TARGETS_LIST)
 	@:
 
 iso: $(KERNEL)
-	@:
+	@if $(GRUB_FILE) $(GRUB_FILE_F) $(KERNEL); then 	\
+		echo "MultiBoot Confirmed !";					\
+	else												\
+		echo "Not a MultiBoot Compitable File !"; 		\
+		exit -1;										\
+	fi
+	$(call execute, mkdir -p $(ISO_DIR)/boot/grub)
+	$(call execute, cp $(KERNEL) $(ISO_DIR)/boot/)
+	$(call execute, cp $(CONFIG_DIR)/grub.cfg $(ISO_DIR)/boot/grub/)
+	$(call execute, $(GRUB_MKRESCUE) $(ISO_DIR) -o $(ISO_DIR)/$(OS_NAME).iso)
+	$(call print, "+ Create ISO Image FIle : $(ISO_DIR)/$(OS_NAME).iso")
 
 clean:
-	$(call execute, rm -rf $(BUILD_DIR))
+	$(call execute, rm -rf $(BUILD_DIR) $(ISO_DIR))
+
+run:
+	$(call execute, $(BOCHS) -f $(CONFIG_DIR)/bochs_cdrom.cfg -q)
 
 # This target make no sense just for git push
 DATE :=	$(shell date)
@@ -112,4 +126,4 @@ git:
 	@git commit -m "$(DATE)"
 	@git push
 
--include $(DEPEDENCIES_LIST)
+-include $(DEPEDENCIES_LIST) 

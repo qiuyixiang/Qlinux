@@ -1,6 +1,5 @@
 /**
  * Copyright (C) 2024 QIUYIXIANG
- * Project : Qlinux
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,12 +20,3 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-#include <arch/i386/boot.h>
-
-void boot_init(uint32_t _mb_checksum, uint32_t * _mb_info_table){
-    if (_mb_checksum){
-
-    }
-    (void)_mb_info_table;
-}

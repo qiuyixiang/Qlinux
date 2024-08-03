@@ -33,6 +33,16 @@
 
 #endif
 
+// Macros For ASM and C
+#define MB_HD_MAGIC_HEADER              0x1BADB002
+#define _MB_HD_FLAGS_4K_ALIGN           0b001
+#define _MB_HD_FLAGS_DETECT_MEM         0b010
+#define _MB_HD_FLAGS_VIDEO_MODE         0b000
+#define MB_HD_FLAGS                     (_MB_HD_FLAGS_4K_ALIGN | _MB_HD_FLAGS_DETECT_MEM | _MB_HD_FLAGS_VIDEO_MODE)
+#define MB_HD_CHECK_SUM                 -(MB_HD_FLAGS + MB_HD_MAGIC_HEADER)
 
+#define MB_VALID_CHECKSUM_EAX           0x2BADB002
 #endif
+
+
 

@@ -22,64 +22,11 @@
  * SOFTWARE.
  */
 
-#define __ASM_FILE__    1
+#include <arch/i386/boot.h>
 
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 1)
-#include <arch/i386/multiboot.h>
-.section .multiboot
-    .align 4
-    .long MB_HD_MAGIC_HEADER
-    .long MB_HD_FLAGS
-    .long MB_HD_CHECK_SUM
-
-# Kernel Stack Here
-.section .bss
-    .align 16
-    _kernel_stack_base:
-    .skip 16384         # 16 Kib
-    _kernel_stack_top:
-
-.section .text
-
-.global _start
-.extern kernel_main
-
-.type kernel_main, @function
-.type _start, @function
-
-# Kernel Entry Address
-_start:
-    # Set Up Kernel Stack
-    movl $_kernel_stack_top, %esp
-    movl %esp, %ebp
-
-    # void kernel_main(uint32_t _mb_checksum, uint32_t * _mb_info_table);
-    pushl %ebx
-    pushl %eax
-
-    call kernel_main
-
-    nop
-    cli
-# Wait for power off
-_hlt:
-    hlt
-    jmp _hlt
-
-#endif
-
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 2)
-#include <arch/i386/multiboot2.h>
-#endif
-
-
-
-
-
-
-
-
-
-
-
-
+void boot_init(uint32_t _mb_checksum, uint32_t * _mb_info_table){
+    if (_mb_checksum){
+        
+    }
+    (void)_mb_info_table;
+}

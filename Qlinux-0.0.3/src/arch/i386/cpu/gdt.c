@@ -24,6 +24,7 @@
 #include <cpu/gdt.h>
 #include <cpu/cpu.h>
 #include <kernel/terminal.h>
+#include <kernel/macro.h>
 
 
 // Macros For Intel I386 Global Descriptor Table
@@ -103,10 +104,18 @@
 #define MAXI_DESCRIPTOR_TABLE_SIZE  8
 static __gd_t __gdt[MAXI_DESCRIPTOR_TABLE_SIZE];
 
+static ALWAYS_INLINE void _init_gdt_0(void * __start, uint32_t __count){
+    for (unsigned char * __buffer = (unsigned char *)__start; __count; --__count, ++__buffer)
+        *__buffer = 0x00;
+}
 static void __cpu_set_gdt_index(uint16_t __seg_index, uint32_t __seg_base_addr, uint32_t __seg_limit,
                                  uint8_t __seg_dpl, uint8_t __seg_S, uint8_t __seg_type){
     if (__seg_index >= MAXI_DESCRIPTOR_TABLE_SIZE)
         return;
+    if (__seg_index == 0){
+        _init_gdt_0((void*)&__gdt[0], sizeof(__gd_t));
+        return;
+    }
     __gdt[__seg_index].seg_base_addr_high = _GD_BASE_ADDR_HIGH(__seg_base_addr);
     __gdt[__seg_index].seg_base_addr_middle = _GD_BASE_ADDR_MIDDLE(__seg_base_addr);
     __gdt[__seg_index].seg_base_addr_low = _GD_BASE_ADDR_LOW(__seg_base_addr);
@@ -139,6 +148,7 @@ void __cpu_gdt_init(void){
 * Index 5 - 7  : Reserved 
 */
     // The CPU Memory Manage Model : Flat Model
+    // Initialized Segment Descriptor And Global Descriptor Table
     __cpu_set_gdt_index(0, DEFAULT_DESCRIPTOR_VALUE, 0x00000, 0, 0, 0);
     __cpu_set_gdt_index(1, DEFAULT_BASE_ADDRESS, DEFAULT_LIMIT_OFFSET, GD_DPL_0, 
                         GD_S_NON_SYSTEM, GD_TYPE_CODE(GD_TYPE_CODE_RD, GD_TYPE_CODE_NON_CONF));
@@ -149,6 +159,13 @@ void __cpu_gdt_init(void){
     __cpu_set_gdt_index(4, DEFAULT_BASE_ADDRESS, DEFAULT_LIMIT_OFFSET, GD_DPL_3,
                         GD_S_NON_SYSTEM, GD_TYPE_DATA(GD_TYPE_DATA_WR, GD_TYPE_DATA_NON_ED));
     __cpu_lgdt((uint32_t)__gdt, sizeof(__gd_t) * MAXI_DESCRIPTOR_TABLE_SIZE - 1);
-    terminal_put_string("[INIT]\tI386 CPU SEGMENT DESCRIPTOR TABLE (GDT) INITIALIZED SUCCESSFULLY!\n");
+    terminal_put_string("[INIT ]\tI386 CPU SEGMENT DESCRIPTOR TABLE (GDT) INITIALIZED SUCCESSFULLY!\n");
 
+    const uint16_t SELECTOR_CODE_RING0  =   GD_SELECTOR(1, GD_SELECTOR_TI_GDT, GD_SELECTOR_RPL0);
+    const uint16_t SELECTOR_DATA_RING0  =   GD_SELECTOR(2, GD_SELECTOR_TI_GDT, GD_SELECTOR_RPL0);
+    i386_update_segment(SELECTOR_DATA_RING0, SELECTOR_DATA_RING0, SELECTOR_DATA_RING0,
+                        SELECTOR_DATA_RING0, SELECTOR_DATA_RING0);
+    
+    i386_update_segment_cs(SELECTOR_CODE_RING0);
+    terminal_put_string("[RESET]\tI386 CPU SEGMENT SELECTOR RESET SUCCESSFULLY!\n");
 }

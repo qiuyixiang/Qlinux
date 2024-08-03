@@ -23,6 +23,7 @@
  */
 
 #include <driver/vga/vga.h>
+#include <kernel/macro.h>
 
 #define VGA_MAXI_COLUMN             80
 #define VGA_MAXI_ROW                25
@@ -84,22 +85,22 @@ void vga_put_char(char __character){
         ++__vga_cursor_column;
     }
 }
-inline void vga_put_string(const char *__ptr){
+ALWAYS_INLINE void vga_put_string(const char *__ptr){
     for (const char * __char_buffer = __ptr; *__char_buffer != '\0'; ++__char_buffer)
         vga_put_char(*__char_buffer);
 }
-inline void vga_write(const char *__ptr, uint32_t __count){
+ALWAYS_INLINE void vga_write(const char *__ptr, uint32_t __count){
     for (; __count; --__count, ++__ptr)
         vga_put_char(*__ptr);
 }
 
-inline void vga_set_font_color(vga_color_attr __color){
+ALWAYS_INLINE void vga_set_font_color(vga_color_attr __color){
     __vga_color_attribute |= __color;
 }
-inline void vga_set_bk_color(vga_color_attr __color){
+ALWAYS_INLINE void vga_set_bk_color(vga_color_attr __color){
     __vga_color_attribute |= (__color << 4);
 }
-inline void vga_set_theme(vga_color_attr __font, vga_color_attr __back_ground){
+ALWAYS_INLINE void vga_set_theme(vga_color_attr __font, vga_color_attr __back_ground){
     vga_set_font_color(__font);
     vga_set_bk_color(__back_ground);
 }

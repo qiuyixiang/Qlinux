@@ -1,6 +1,5 @@
 /**
  * Copyright (C) 2024 QIUYIXIANG
- * Project : Qlinux
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,46 +21,11 @@
  * SOFTWARE.
  */
 
-#include <kernel/config.h>
+// Define Some Helper Functions
+#ifndef __KERNEL_MACRO_H__
+#define __KERNEL_MACRO_H__     1
 
-// Include Header Files According to Architecture
-#if defined(__CXX_ARCH__) && (__CXX_ARCH__ == i386)
-#include <boot/boot.h>
-#include <cpu/cpu.h>
+#define ALWAYS_INLINE                   inline
+#define BOCHS_MAGIC_BREAKPOINT()       __asm__ volatile("xchg %bx, %bx")
+
 #endif
-
-#if defined(__CXX_ARCH__) && (__CXX_ARCH__ == x86_64)
-#include <cpu/cpu.h>
-#endif
-
-// General Purpose Headers (Compatible With All Hardware Platform)
-#include <kernel/terminal.h>
-#include <kernel/type.h>
-#include <kernel/macro.h>
-
-// Using GNU Grub Multiboot Will Have Two Arguments
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ != 0)
-void kernel_main(uint32_t _mb_checksum, uint32_t * _mb_info_table)
-#else
-// Other BootLoader Initialization 
-void kernel_main(uint32_t * _boot_info_table)
-#endif
-{
-    /// Initialize Terminal Device
-    terminal_init();
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ != 0)
-    /// BootLoader Configuration (Only for Multiboot)
-    boot_init(_mb_checksum, _mb_info_table);
-#else 
-    boot_init(_boot_info_table);
-#endif
-    /// Initialize CPU State
-    cpu_init();
-    
-
-    while (1){
-        
-    }
-}
-
-

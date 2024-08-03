@@ -26,9 +26,19 @@
 #include <cpu/idt.h>
 #include <kernel/terminal.h>
 
+void i386_update_segment(uint16_t DS, uint16_t FS, uint16_t GS, uint16_t ES, uint16_t SS){
+    __asm__ volatile(
+        "movw %0, %%ds \n\t"
+        "movw %1, %%fs \n\t"
+        "movw %2, %%gs \n\t"
+        "movw %3, %%es \n\t"
+        "movw %4, %%ss \n\t"
+        :: "r"(DS), "r"(FS), "r"(GS), "r"(ES), "r"(SS)
+    );
+}
 void cpu_init(void){
 
     __cpu_gdt_init();
     __cpu_idt_init();
-    terminal_put_string("[INIT]\tCPU STATE INITIALIZE SUCCESSFULLY!\n");
+    terminal_put_string("[INIT ]\tCPU STATE INITIALIZE SUCCESSFULLY!\n");
 }

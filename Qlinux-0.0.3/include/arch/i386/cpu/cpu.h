@@ -29,6 +29,16 @@
 // Public Function Interface For Kernel Main
 extern void cpu_init(void);
 
+// Reversed Function For Inner Implementation Of i386 CPU
+#define i386_update_segment_cs(CS)  __asm__ volatile(       \
+                                    "pushw %0 \n\t"         \
+                                    "pushl $flash \n\t"     \
+                                    "retf \n\t"             \
+                                    "flash: nop \n\t"       \
+                                    :: "r"(CS)              \
+                                );
+extern void i386_update_segment(uint16_t DS, uint16_t FS, uint16_t GS, uint16_t ES, uint16_t SS);
+
 #endif
 
 

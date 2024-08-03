@@ -26,12 +26,12 @@
 
 // Include Header Files According to Architecture
 #if defined(__CXX_ARCH__) && (__CXX_ARCH__ == i386)
-#include <arch/i386/cpu.h>
-#include <arch/i386/boot.h>
+#include <boot/boot.h>
+#include <cpu/cpu.h>
 #endif
 
 #if defined(__CXX_ARCH__) && (__CXX_ARCH__ == x86_64)
-#include <arch/x86_64/cpu.h>
+#include <cpu/cpu.h>
 #endif
 
 // General Purpose Headers (Compatible With All Hardware Platform)

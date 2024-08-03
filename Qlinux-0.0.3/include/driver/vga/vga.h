@@ -25,6 +25,37 @@
 #ifndef __DRIVER_VGA_VAG_H__
 #define __DRIVER_VGA_VAG_H__    1
 
+#include <kernel/type.h>
+
+typedef enum __vga_color_attr{
+    VGA_COLOR_BLACK         =   0,
+    VGA_COLOR_BLUE          =   1,
+    VGA_COLOR_GREEN         =   2,
+    VGA_COLOR_SYAN          =   3,
+    VGA_COLOR_RED           =   4,
+    VGA_COLOR_MAGENTA       =   5,
+    VGA_COLOR_BROWN         =   6,
+    VGA_COLOR_WHITE         =   7,
+    VGA_COLOR_GREY          =   8,
+    VGA_COLOR_LIGHT_BLUE    =   9,
+    VGA_COLOR_LIGHT_GREEN   =   10,
+    VGA_COLOR_LIGHT_CYAN    =   11,
+    VGA_COLOR_LIGHT_RED     =   12,
+    VGA_COLOR_LIGHT_MAGENTA =   13,
+    VGA_COLOR_YELLOW        =   14,
+    VGA_COLOR_LIGHT_WHITE   =   15
+}vga_color_attr;
+
+// VGA Public Function Interface
 extern void vga_init(void);
+
+extern void vga_put_char(char __character);
+extern void vga_put_string(const char * __ptr);
+extern void vga_write(const char * __ptr, uint32_t __count);
+
+extern void vga_set_font_color(vga_color_attr __color);
+extern void vga_set_bk_color(vga_color_attr __color);
+extern void vga_set_theme(vga_color_attr __font, vga_color_attr __back_ground);
+extern void vga_clear_screen();
 
 #endif

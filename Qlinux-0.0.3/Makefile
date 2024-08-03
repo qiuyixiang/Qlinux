@@ -15,11 +15,21 @@ DEPDENT_DIR		:=	$(BUILD_DIR)/dep
 
 -include $(CONFIG_DIR)/config.mk
 
+# C Include Path Search
+INCLUDE_ARCH_DIR	:=	$(INCLUDE_DIR)/arch/$(ARCH)
+INCLUDE_LIB_C_DIR	:=	$(INCLUDE_DIR)/lib/libc
+
+INCLUDE_DIR_LIST	:=
+INCLUDE_DIR_LIST	+=	-I$(INCLUDE_DIR)
+INCLUDE_DIR_LIST	+=	-I$(INCLUDE_ARCH_DIR)
+INCLUDE_DIR_LIST	+=	-I$(INCLUDE_LIB_C_DIR)
+
 ARCH_MAIN		:=	$(SRC_DIR)/arch
 ARCH_DIR		:=	$(ARCH_MAIN)/$(ARCH)
 KERNLE_DIR		:=	$(BUILD_DIR)
 
 KERNEL_LINK		:=	$(OS_NAME).bin
+
 # Binary Kernel Name and Position
 KERNEL			:=	$(KERNLE_DIR)/$(KERNEL_LINK)
 
@@ -51,14 +61,14 @@ ifeq ($(SILENT), 1)
 	$(call print, "+ CC \\t\\t $@")
 endif
 	$(call execute, $(call check_dir, $(dir $@)))
-	$(call execute, $(CC) $(CC_FLAGS) -I $(INCLUDE_DIR) -MD -MF $(DEPDENT_DIR)/$(basename $(notdir $@)).d -c $< -o $@)
+	$(call execute, $(CC) $(CC_FLAGS) $(INCLUDE_DIR_LIST) -MD -MF $(DEPDENT_DIR)/$(basename $(notdir $@)).d -c $< -o $@)
 	
 $(BUILD_DIR)/%.S.o: $(SRC_DIR)/%.S
 ifeq ($(SILENT), 1)
 	$(call print, "+ AS \\t\\t $@")
 endif
 	$(call execute, $(call check_dir, $(dir $@)))
-	$(call execute, $(CC) $(CC_FLAGS) -I $(INCLUDE_DIR) -MD -MF $(DEPDENT_DIR)/$(basename $(notdir $@)).d -c $< -o $@)
+	$(call execute, $(CC) $(CC_FLAGS) $(INCLUDE_DIR_LIST) -MD -MF $(DEPDENT_DIR)/$(basename $(notdir $@)).d -c $< -o $@)
 
 $(BUILD_DIR)/%.cpp.o: $(SRC_DIR)/%.cpp
 	$(error Doesn't Support For Compile C++ Source File Now !)
@@ -76,9 +86,12 @@ ifeq ($(SILENT), 1)
 	$(call print, "+ LD \\t\\t $@")
 endif
 
+$(SHOW_ARCH):
+	$(call print, "Build for Architecture : $(ARCH)")
+
 # Build Receipts
 .DEFAULT_GOAL	:=		info
-.PHONY:	all clean run info
+.PHONY:	all clean run info 
 
 # The Argument Option will be abandoned after the support for Kconfig
 info:

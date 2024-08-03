@@ -21,8 +21,14 @@
  * SOFTWARE.
  */
 
-#include <arch/i386/cpu.h>
+#include <cpu/cpu.h>
+#include <cpu/gdt.h>
+#include <cpu/idt.h>
+#include <kernel/terminal.h>
 
 void cpu_init(void){
 
+    __cpu_gdt_init();
+    __cpu_idt_init();
+    terminal_put_string("[INIT]\tCPU STATE INITIALIZE SUCCESSFULLY!\n");
 }

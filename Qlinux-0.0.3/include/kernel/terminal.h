@@ -25,8 +25,25 @@
 #ifndef __KERNEL_TERMINAL_H__
 #define __KERNEL_TERMINAL_H__   1
 
+#include <kernel/type.h>
+
+#if defined(__CXX_DISPLAY_VGA__) && (__CXX_DISPLAY_VGA__ == 1)
+
+#define TTY_COLOR_BLACK         VGA_COLOR_BLACK
+#define TTY_COLOR_WHITE         VGA_COLOR_WHITE
+#define TTY_COLOR_GREEN         VGA_COLOR_GREEN
+#define TTY_COLOR_BLUE          VGA_COLOR_BLUE
+#define TTY_COLOR_RED           VGA_COLOR_RED
+#define TTY_COLOR_GREY          VGA_COLOR_GREY
+#define TTY_COLOR_YELLOW        VGA_COLOR_YELLOW
+
+#endif
+
 // Public Function Interface For Kernel Main
 extern void terminal_init(void);
+extern void terminal_put_char(char character);
+extern void terminal_put_string(const char * str);
+extern void terminal_write(const char * buffer, uint32_t count);
 
 
 #endif 

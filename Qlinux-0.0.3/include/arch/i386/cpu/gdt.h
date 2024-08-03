@@ -1,8 +1,6 @@
 /**
  * Copyright (C) 2024 QIUYIXIANG
- * Project : Qlinux
  * 
- * MIT License
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
@@ -23,22 +21,32 @@
  * SOFTWARE.
  */
 
-#ifndef __ARCH_I386_BOOT_H__
-#define __ARCH_I386_BOOT_H__   1
+#ifndef __ARCH_I386_GDT_H__
+#define __ARCH_I386_GDT_H__     1
 
 #include <kernel/type.h>
 
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ != 0)
-// Include MultiBoot Header 
-#if (__CXX_MULTIBOOT__ == 1)
-#include <arch/i386/multiboot.h>
-#endif 
-#if (__CXX_MULTIBOOT__ == 2)
-#include <arch/i386/multiboot2.h>
-#endif
+typedef struct __gd{
+    uint64_t seg_limit_low          :   16;
+    uint64_t seg_base_addr_low      :   16;
+    uint64_t seg_base_addr_middle   :   8;
+    uint64_t seg_type_field         :   4;
+    uint64_t seg_S_field            :   1;
+    uint64_t seg_dpl_field          :   2;
+    uint64_t seg_p_field            :   1;
+    uint64_t seg_limit_high         :   4;
+    uint64_t seg_avl_field          :   1;
+    uint64_t seg_l_field            :   1;
+    uint64_t seg_DB_field           :   1;
+    uint64_t seg_G_field            :   1;
+    uint64_t seg_base_addr_high     :   8;
+}__attribute__((packed)) __gd_t;
 
-#endif
+struct __gdtr_t{
+    uint16_t _gdt_limit;
+    uint32_t _gdt_base_addr;
+}__attribute__((packed));
 
-extern void boot_init(uint32_t _mb_checksum, uint32_t * _mb_info_table);
+extern void __cpu_gdt_init(void);
 
 #endif

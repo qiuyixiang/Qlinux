@@ -1,6 +1,5 @@
 /**
  * Copyright (C) 2024 QIUYIXIANG
- * Project : Qlinux
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +21,9 @@
  * SOFTWARE.
  */
 
-#include <kernel/terminal.h>
-#include <kernel/config.h>
+#ifndef __ARCH_I386_IDT_H__
+#define __ARCH_I386_IDT_H__     1
 
-// Include MultiBoot Header 
-#if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ != 0)
-#if (__CXX_MULTIBOOT__ == 1)
-#include <boot/multiboot.h>
-#endif 
+extern void __cpu_idt_init(void);
 
-#if (__CXX_MULTIBOOT__ == 2)
-#include <boot/multiboot.h>
 #endif
-#endif
-
-void boot_init(uint32_t _mb_checksum, uint32_t * _mb_info_table){
-    if (_mb_checksum == MB_VALID_CHECKSUM_EAX)
-        terminal_put_string("[CHECK]\tMULTIBOOT HEADER CHECKSUM CHECK SUCCESSFULLY!\n");
-    else
-        terminal_put_string("[ERROR]\tMULTIBOOT HEADER CHECKSUM CHECK FAILED!!!\n");
-    
-    (void)_mb_info_table;
-}

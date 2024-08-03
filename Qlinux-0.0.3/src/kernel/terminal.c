@@ -22,7 +22,6 @@
  */
 
 #include <kernel/config.h>
-
 #include <kernel/terminal.h>
 
 // Low Layer Hardware Driver Header
@@ -30,7 +29,24 @@
 #include <driver/vga/vga.h>
 #endif 
 
-
+void terminal_put_char(char character){
+#if defined(__CXX_DISPLAY_VGA__) && (__CXX_DISPLAY_VGA__ == 1)
+    vga_put_char(character);
+#endif 
+}
+void terminal_put_string(const char * str){
+#if defined(__CXX_DISPLAY_VGA__) && (__CXX_DISPLAY_VGA__ == 1)
+    vga_put_string(str);
+#endif 
+}
+void terminal_write(const char * buffer, uint32_t count){
+#if defined(__CXX_DISPLAY_VGA__) && (__CXX_DISPLAY_VGA__ == 1)
+    vga_write(buffer, count);
+#endif 
+}
 void terminal_init(void){
-
+#if defined(__CXX_DISPLAY_VGA__) && (__CXX_DISPLAY_VGA__ == 1)
+    vga_init();
+#endif 
+    terminal_put_string("[INIT ]\tTERMINAL DEVICE INITIALIZED SUCCESSFULLY!\n");
 }

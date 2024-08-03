@@ -25,7 +25,9 @@
 #define __ASM_FILE__    1
 
 #if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 1)
-#include <arch/i386/multiboot.h>
+#include <boot/multiboot.h>
+
+#define STACK_SIZE  0x4000
 .section .multiboot
     .align 4
     .long MB_HD_MAGIC_HEADER
@@ -36,7 +38,7 @@
 .section .bss
     .align 16
     _kernel_stack_base:
-    .skip 16384         # 16 Kib
+    .skip STACK_SIZE        # 16 Kib
     _kernel_stack_top:
 
 .section .text
@@ -51,6 +53,8 @@
 _start:
     # Set Up Kernel Stack
     movl $_kernel_stack_top, %esp
+
+    push %ebp
     movl %esp, %ebp
 
     # void kernel_main(uint32_t _mb_checksum, uint32_t * _mb_info_table);
@@ -69,7 +73,7 @@ _hlt:
 #endif
 
 #if defined(__CXX_MULTIBOOT__) && (__CXX_MULTIBOOT__ == 2)
-#include <arch/i386/multiboot2.h>
+#include <boot/multiboot2.h>
 #endif
 
 

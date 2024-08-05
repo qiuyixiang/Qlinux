@@ -131,6 +131,7 @@ static void __cpu_set_gdt_index(uint16_t __seg_index, uint32_t __seg_base_addr, 
     __gdt[__seg_index].seg_dpl_field = __seg_dpl;
 
 }
+/// Instruction For Intel i386 lgdt
 static void __cpu_lgdt(uint32_t _gdt_addr, uint16_t _gdt_limit){
     struct __gdtr_t gdtr_l;
     gdtr_l._gdt_base_addr = _gdt_addr;
@@ -147,7 +148,7 @@ void __cpu_gdt_init(void){
 * Index 4      : Ring 3 Data Segment
 * Index 5 - 7  : Reserved 
 */
-    // The CPU Memory Manage Model : Flat Model
+    // The CPU Memory Manage Model : i386 Flat Model
     // Initialized Segment Descriptor And Global Descriptor Table
     __cpu_set_gdt_index(0, DEFAULT_DESCRIPTOR_VALUE, 0x00000, 0, 0, 0);
     __cpu_set_gdt_index(1, DEFAULT_BASE_ADDRESS, DEFAULT_LIMIT_OFFSET, GD_DPL_0, 
